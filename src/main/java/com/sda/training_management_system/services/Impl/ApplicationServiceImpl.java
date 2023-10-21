@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.Application;
+import com.sda.training_management_system.repositories.ApplicationRepository;
 import com.sda.training_management_system.services.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
+    private final ApplicationRepository applicationRepository;
     @Override
     public Application create(Application entity) {
         return null;

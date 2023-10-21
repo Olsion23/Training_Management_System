@@ -24,4 +24,12 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "userId")
     )
     private List<User> participants;
+
+    @ManyToMany
+    @JoinTable(
+            name = "leader_course",
+            joinColumns = @JoinColumn(name = "courseId"),
+            inverseJoinColumns = @JoinColumn(name = "userId")
+    )
+    private List<User> leaders;
 }

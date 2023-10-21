@@ -14,9 +14,6 @@ public class Notification {
     @Id
     @GeneratedValue
     private Long notificationId;
-    @ManyToOne
-    private Class aClass;
-
     private String subject;
     private String content;
 

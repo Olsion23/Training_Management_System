@@ -10,5 +10,5 @@ public interface NotificationService {
     Notification findById(Long notificationId);
     List<Notification>findAll();
     String delete(Long notificationId);
-
+    void createNotificationForCourse(Long courseId, Notification notification);
 }

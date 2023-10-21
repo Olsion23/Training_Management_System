@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.Class;
+import com.sda.training_management_system.repositories.ClassRepository;
 import com.sda.training_management_system.services.ClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ClassServiceImpl implements ClassService {
+    private final ClassRepository classRepository;
     @Override
     public Class create(Class entity) {
         return null;

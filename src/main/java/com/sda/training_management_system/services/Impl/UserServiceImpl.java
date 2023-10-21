@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.User;
+import com.sda.training_management_system.repositories.UserRepository;
 import com.sda.training_management_system.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
     @Override
     public User create(User entity) {
         return null;

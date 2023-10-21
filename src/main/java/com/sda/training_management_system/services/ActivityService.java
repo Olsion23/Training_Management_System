@@ -6,10 +6,12 @@ import java.util.List;
 
 public interface ActivityService {
     Activity create(Activity entity);
+
     Activity update(Activity entity);
+
     Activity findById(Long activityId);
+
     List<Activity> findAll();
+
     String delete(Long activityId);
-
-
 }

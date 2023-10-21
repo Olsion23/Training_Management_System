@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Classes")
@@ -17,7 +18,8 @@ public class Class {
     @GeneratedValue
     private Long classId;
     private String subject;
-    private Date date;
     @ManyToOne
     private Course course;
+    @OneToMany(mappedBy = "aClass")
+    List<Activity> activities;
 }

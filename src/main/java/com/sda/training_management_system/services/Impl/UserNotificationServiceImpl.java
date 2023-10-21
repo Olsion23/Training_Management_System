@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.UserNotification;
+import com.sda.training_management_system.repositories.UserNotificationRepository;
 import com.sda.training_management_system.services.UserNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class UserNotificationServiceImpl implements UserNotificationService {
+    private final UserNotificationRepository userNotificationRepository;
     @Override
     public UserNotification create(UserNotification entity) {
         return null;
