@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "Activities")
@@ -15,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Activity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long activityId;
     private String subject;
     private LocalDate date;

@@ -18,75 +18,68 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 @Configuration
 public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
-
-    private final UserDetailsServiceImpl userService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final RoleRepository roleRepository;
     @Value(value = "${frontendUrl}")
-    private String frontendUrl;
-
-    private static final String[] allowedUrls = new String[]
-            {};
+    private static String allowedUrl;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, RoleRepository roleRepository) {
-        this.userService = userDetailsService;
+        this.userDetailsServiceImpl = userDetailsService;
         this.roleRepository = roleRepository;
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
-        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
-        http.authorizeHttpRequests(request -> {
-                    request
-                            .anyRequest().authenticated();
-                })
-                .authenticationManager(authenticationManager)
-                .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults());
-        return http.build();
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(frontendUrl)
+                .allowedOrigins(allowedUrl)
+                .allowedHeaders("Authorization")
                 .allowedMethods("*");
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws Exception {
         if (!roleRepository.existsById("ROLE_ADMIN")){
-            Role role = Role.builder()
-                    .roleId("ROLE_ADMIN")
-                    .build();
-            roleRepository.save(role);
-        }
-        if (!roleRepository.existsById("ROLE_USER")){
-            Role role = Role.builder()
-                    .roleId("ROLE_USER")
-                    .build();
+            Role role = new Role();
+            role.setRoleId("ROLE_ADMIN");
             roleRepository.save(role);
         }
         if (!roleRepository.existsById("ROLE_LEADER")){
-            Role role = Role.builder()
-                    .roleId("ROLE_LEADER")
-                    .build();
+            Role role = new Role();
+            role.setRoleId("ROLE_LEADER");
+            roleRepository.save(role);
+        }
+        if (!roleRepository.existsById("ROLE_PARTICIPANT")){
+            Role role = new Role();
+            role.setRoleId("ROLE_PARTICIPANT");
             roleRepository.save(role);
         }
     }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+        httpSecurity.authenticationManager(authenticationManager)
+                .authorizeHttpRequests(request -> {
+                    request.anyRequest().permitAll();
+                })
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults());
+        return httpSecurity.build();
+    }
 }

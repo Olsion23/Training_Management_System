@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services;
 
 import com.sda.training_management_system.dao.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -12,4 +13,7 @@ public interface UserService {
     String delete(Long userId);
 
     User findUserLoggedIn();
+    ResponseEntity<?> login(AuthRequest authRequest);
+    User register(User user);
+
 }

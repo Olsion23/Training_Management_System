@@ -25,14 +25,17 @@ public class ActivityServiceImpl implements ActivityService {
         if (entity.getActivityId() != null) {
             throw GenericExceptions.idNotNull();
         } else {
-            Class existingClass = classRepository.findById(entity.getAClass().getClassId())
-                    .orElseThrow();
-            entity.setAClass(existingClass);
-            activityRepository.save(entity);
-            return entity;
+            if (entity.getAClass() != null && entity.getAClass().getClassId() != null) {
+                Class existingClass = classRepository.findById(entity.getAClass().getClassId())
+                        .orElseThrow(() -> GenericExceptions.notFound(entity.getAClass()));
+                entity.setAClass(existingClass);
+                activityRepository.save(entity);
+                return entity;
+            } else {
+                throw GenericExceptions.notFound(entity.getAClass());
+            }
         }
     }
-
     @Override
     public Activity update(Activity entity) {
         if (entity.getActivityId() == null) {
@@ -46,7 +49,7 @@ public class ActivityServiceImpl implements ActivityService {
                 existingActivity.setSubject(entity.getSubject());
             if (entity.getAClass() != null) {
                 Class existingClass = classRepository.findById(entity.getAClass().getClassId())
-                        .orElseThrow();
+                        .orElseThrow(()-> GenericExceptions.notFound(entity.getAClass()));
                 existingActivity.setAClass(existingClass);
             }
             activityRepository.save(existingActivity);

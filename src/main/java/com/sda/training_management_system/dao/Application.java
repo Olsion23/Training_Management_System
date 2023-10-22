@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -13,9 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class Application {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationId;
-    private Date date;
+    private LocalDate localDate;
     @ManyToOne
     @JoinColumn(name = "participantId")
     private User participant;
