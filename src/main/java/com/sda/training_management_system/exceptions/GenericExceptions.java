@@ -15,6 +15,10 @@ public class GenericExceptions extends RuntimeException{
     public static GenericExceptions notFound(Object id){
         return new GenericExceptions(String.format("Record with id %s does not exist", id), 404);
     }
+    public static GenericExceptions userNotFound(){
+        String message = "User not found";
+        return new GenericExceptions(message,404);
+    }
     public static GenericExceptions usernameExist(String usename){
         String message = String.format("Record with username %s exists", usename);
         return new GenericExceptions(message, 400);
