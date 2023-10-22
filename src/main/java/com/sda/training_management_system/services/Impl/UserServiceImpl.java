@@ -1,9 +1,11 @@
 package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.User;
+import com.sda.training_management_system.exceptions.GenericExceptions;
 import com.sda.training_management_system.repositories.UserRepository;
 import com.sda.training_management_system.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,4 +40,11 @@ public class UserServiceImpl implements UserService {
     public String delete(Long userId) {
         return null;
     }
+
+    @Override
+    public User findUserLoggedIn() {
+        return userRepository.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName())
+                .orElseThrow(()-> GenericExceptions.userNotFound());
+    }
+
 }

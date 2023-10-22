@@ -23,4 +23,9 @@ public class GenericExceptions extends RuntimeException{
         return status;
     }
 
+    public static GenericExceptions userNotFound(){
+        String message="User not found";
+        return new GenericExceptions(message,404);
+    }
+
 }

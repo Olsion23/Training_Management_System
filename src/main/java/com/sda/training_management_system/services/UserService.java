@@ -10,4 +10,6 @@ public interface UserService {
     User findById(Long userId);
     List<User>findAll();
     String delete(Long userId);
+
+    User findUserLoggedIn();
 }

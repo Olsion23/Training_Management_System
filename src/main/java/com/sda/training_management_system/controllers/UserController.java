@@ -4,6 +4,7 @@ import com.sda.training_management_system.dao.Activity;
 import com.sda.training_management_system.dao.User;
 import com.sda.training_management_system.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,4 +39,5 @@ public class UserController {
     public String deleteById(@RequestParam Long userId) {
         return userService.delete(userId);
     }
+
 }
