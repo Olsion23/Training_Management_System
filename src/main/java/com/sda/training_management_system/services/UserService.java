@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services;
 
 import com.sda.training_management_system.dao.User;
+import com.sda.training_management_system.security.AuthRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

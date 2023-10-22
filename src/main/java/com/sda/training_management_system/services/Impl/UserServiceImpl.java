@@ -6,7 +6,6 @@ import com.sda.training_management_system.repositories.UserRepository;
 import com.sda.training_management_system.security.AuthRequest;
 import com.sda.training_management_system.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
