@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     @Column(unique = true)
     private String login;
@@ -37,6 +37,4 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<UserNotification> notifications;
-
-
 }

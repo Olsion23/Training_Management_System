@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Class {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long classId;
     private String subject;
     @ManyToOne
