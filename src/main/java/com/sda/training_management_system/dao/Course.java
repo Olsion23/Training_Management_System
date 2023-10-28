@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "Courses")
+@Table(name = "courses")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,19 +17,6 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;
     private String courseName;
-    @ManyToMany
-    @JoinTable(
-            name = "user_course",
-            joinColumns = @JoinColumn(name = "courseId"),
-            inverseJoinColumns = @JoinColumn(name = "userId")
-    )
-    private List<User> participants;
-
-    @ManyToMany
-    @JoinTable(
-            name = "leader_course",
-            joinColumns = @JoinColumn(name = "courseId"),
-            inverseJoinColumns = @JoinColumn(name = "userId")
-    )
-    private List<User> leaders;
+    @OneToMany(mappedBy = "course")
+    private List<Class> classes;
 }

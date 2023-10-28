@@ -30,10 +30,10 @@ public class User {
     private List<Application> applications;
 
     @ManyToMany(mappedBy = "participants")
-    private List<Course> courses;
+    private List<Class> courses;
 
     @ManyToMany(mappedBy = "leaders")
-    private List<Course> leaderCourses;
+    private List<Class> leaderCourses;
 
     @OneToMany(mappedBy = "user")
     private List<UserNotification> notifications;

@@ -1,5 +1,6 @@
 package com.sda.training_management_system.services.Impl;
 
+import com.sda.training_management_system.dao.Class;
 import com.sda.training_management_system.dao.Course;
 import com.sda.training_management_system.dao.Notification;
 import com.sda.training_management_system.dao.User;
@@ -8,6 +9,7 @@ import com.sda.training_management_system.exceptions.GenericExceptions;
 import com.sda.training_management_system.repositories.CourseRepository;
 import com.sda.training_management_system.repositories.NotificationRepository;
 import com.sda.training_management_system.repositories.UserNotificationRepository;
+import com.sda.training_management_system.services.ClassService;
 import com.sda.training_management_system.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Transactional
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
-    private final CourseRepository courseRepository;
-    private UserNotificationRepository userNotificationRepository;
+    private final ClassService classService;
+    private final UserNotificationRepository userNotificationRepository;
     private final NotificationRepository notificationRepository;
     @Override
     public Notification create(Notification entity) {
@@ -34,12 +36,14 @@ public class NotificationServiceImpl implements NotificationService {
         if (entity.getNotificationId() == null) {
             throw GenericExceptions.idIsNull();
         } else {
-            Optional<Notification> existingUser = notificationRepository.findById(entity.getNotificationId());
-            if (existingUser.isPresent()) {
-                notificationRepository.save(entity);
-            }
+            Notification existingNotification = this.findById(entity.getNotificationId());
+            if (entity.getSubject() != null)
+                existingNotification.setSubject(entity.getSubject());
+            if (entity.getContent() != null)
+                existingNotification.setContent(entity.getContent());
+            notificationRepository.save(existingNotification);
+            return existingNotification;
         }
-        return entity;
     }
 
     @Override
@@ -60,11 +64,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForCourse(Long courseId, Notification notification) {
+    public void createNotificationForCourse(Long classId, Notification notification) {
         AtomicReference<Notification> newNotification =
                 new AtomicReference<>(notificationRepository.save(notification));
-        Course course = courseRepository.findById(courseId).orElseThrow(()-> GenericExceptions.notFound(courseId));
-        List<User> participants = course.getParticipants();
+        Class clazz = classService.findById(classId);
+        List<User> participants = clazz.getParticipants();
         participants.forEach(participant -> {
             UserNotification userNotification = new UserNotification();
             userNotification.setNotification(newNotification.get());

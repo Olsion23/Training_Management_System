@@ -19,7 +19,12 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     @Override
     public Course create(Course entity) {
-        return null;
+        if (entity.getCourseId() != null)
+            throw GenericExceptions.idNotNull();
+        else {
+            courseRepository.save(entity);
+            return entity;
+        }
     }
 
     @Override
@@ -27,12 +32,12 @@ public class CourseServiceImpl implements CourseService {
         if (entity.getCourseId() == null) {
             throw GenericExceptions.idIsNull();
         } else {
-            Optional<Course> existingUser = courseRepository.findById(entity.getCourseId());
-            if (existingUser.isPresent()) {
-                courseRepository.save(entity);
-            }
+           Course existingCourse = this.findById(entity.getCourseId());
+           if (entity.getCourseName() != null)
+               existingCourse.setCourseName(entity.getCourseName());
+           courseRepository.save(existingCourse);
+           return existingCourse;
         }
-        return entity;
     }
     @Override
     public Course findById(Long courseId) {

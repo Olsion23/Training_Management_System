@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Classes")
+@Table(name = "classes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +22,19 @@ public class Class {
     private Course course;
     @OneToMany(mappedBy = "aClass")
     List<Activity> activities;
+    @ManyToMany
+    @JoinTable(
+            name = "user_class",
+            joinColumns = @JoinColumn(name = "classId"),
+            inverseJoinColumns = @JoinColumn(name = "userId")
+    )
+    private List<User> participants;
+
+    @ManyToMany
+    @JoinTable(
+            name = "leader_class",
+            joinColumns = @JoinColumn(name = "classId"),
+            inverseJoinColumns = @JoinColumn(name = "userId")
+    )
+    private List<User> leaders;
 }

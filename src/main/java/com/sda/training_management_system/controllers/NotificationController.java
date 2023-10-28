@@ -14,28 +14,33 @@ import java.util.List;
 public class NotificationController {
     private final NotificationService notificationService;
 
-    @GetMapping("/all")
-    public List<Notification> getAll() {
-        return notificationService.findAll();
-    }
+//    @GetMapping("/all")
+//    public List<Notification> getAll() {
+//        return notificationService.findAll();
+//    }
 
-    @GetMapping("/{id}")
-    public Notification getById(@PathVariable Long id) {
-        return notificationService.findById(id);
-    }
+//    @GetMapping("/{id}")
+//    public Notification getById(@PathVariable Long id) {
+//        return notificationService.findById(id);
+//    }
 
-    @PostMapping("/create")
-    public Notification create(@RequestBody Notification notification) {
-        return notificationService.create(notification);
-    }
+//    @PostMapping("/create")
+//    public Notification create(@RequestBody Notification notification) {
+//        return notificationService.create(notification);
+//    }
 
     @PutMapping("/update")
     public Notification update(@RequestBody Notification notification) {
         return notificationService.update(notification);
     }
 
-    @DeleteMapping("/delete")
-    public String deleteById(@RequestParam Long notificationId) {
-        return notificationService.delete(notificationId);
+    @PostMapping("/create")
+    public void createNotificationForClass(@RequestParam Long classId, @RequestBody Notification notification){
+        notificationService.createNotificationForCourse(classId, notification);
     }
+
+//    @DeleteMapping("/delete")
+//    public String deleteById(@RequestParam Long notificationId) {
+//        return notificationService.delete(notificationId);
+//    }
 }
