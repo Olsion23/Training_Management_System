@@ -43,7 +43,7 @@ public class UserNotificationController {
         return userNotificationService.findAllByUserLoggedIn();
     }
     @GetMapping("/read_notifications")
-    public void readNotification(Long userNotificationId){
+    public void readNotification(@RequestParam Long userNotificationId){
         userNotificationService.readNotification(userNotificationId);
     }
 
