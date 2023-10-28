@@ -47,6 +47,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserLoggedIn() {
+        return userRepository.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName())
+                .orElseThrow(()-> GenericExceptions.userNotFound());
+    }
+
+
+    @Override
     public ResponseEntity<?> login(AuthRequest authRequest) {
         return null;
     }

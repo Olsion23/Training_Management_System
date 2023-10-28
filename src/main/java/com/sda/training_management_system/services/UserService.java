@@ -12,6 +12,8 @@ public interface UserService {
     User findById(Long userId);
     List<User>findAll();
     String delete(Long userId);
+
+    User findUserLoggedIn();
     ResponseEntity<?> login(AuthRequest authRequest);
     User register(User user);
 
