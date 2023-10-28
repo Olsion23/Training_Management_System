@@ -38,4 +38,13 @@ public class UserNotificationController {
     public String deleteById(@RequestParam Long userNotificationId) {
         return userNotificationService.delete(userNotificationId);
     }
+    @GetMapping("/all_user_notifications")
+    public List<UserNotification> findAllByUserLoggedIn(){
+        return userNotificationService.findAllByUserLoggedIn();
+    }
+    @GetMapping("/read_notifications")
+    public void readNotification(Long userNotificationId){
+        userNotificationService.readNotification(userNotificationId);
+    }
+
 }
