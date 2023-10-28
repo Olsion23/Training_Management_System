@@ -81,7 +81,8 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
         httpSecurity.authenticationManager(authenticationManager)
                 .authorizeHttpRequests(request -> {
-                    request.anyRequest().permitAll();
+                    request.requestMatchers("/user/create").hasRole("ADMIN")
+                            .anyRequest().permitAll();
                 })
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

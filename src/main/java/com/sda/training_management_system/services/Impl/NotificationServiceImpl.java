@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -30,22 +31,32 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification update(Notification entity) {
-        return null;
+        if (entity.getNotificationId() == null) {
+            throw GenericExceptions.idIsNull();
+        } else {
+            Optional<Notification> existingUser = notificationRepository.findById(entity.getNotificationId());
+            if (existingUser.isPresent()) {
+                notificationRepository.save(entity);
+            }
+        }
+        return entity;
     }
 
     @Override
     public Notification findById(Long notificationId) {
-        return null;
+        Optional<Notification> user = notificationRepository.findById(notificationId);
+        return user.orElseThrow(()-> GenericExceptions.notFound(notificationId));
     }
 
     @Override
     public List<Notification> findAll() {
-        return null;
+        return notificationRepository.findAll();
     }
 
     @Override
     public String delete(Long notificationId) {
-        return null;
+        notificationRepository.findById(notificationId);
+        return String.format("Record with id %d deleted", notificationId);
     }
 
     @Override
