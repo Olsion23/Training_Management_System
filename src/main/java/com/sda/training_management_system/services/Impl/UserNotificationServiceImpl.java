@@ -5,6 +5,7 @@ import com.sda.training_management_system.dao.UserNotification;
 import com.sda.training_management_system.exceptions.GenericExceptions;
 import com.sda.training_management_system.repositories.UserNotificationRepository;
 import com.sda.training_management_system.services.UserNotificationService;
+import com.sda.training_management_system.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserNotificationServiceImpl implements UserNotificationService {
     private final UserNotificationRepository userNotificationRepository;
+    private final UserService userService;
     @Override
     public UserNotification create(UserNotification entity) {
         return null;
@@ -37,8 +39,8 @@ public class UserNotificationServiceImpl implements UserNotificationService {
 
     @Override
     public UserNotification findById(Long userNotificationId) {
-        Optional<UserNotification> user = userNotificationRepository.findById(userNotificationId);
-        return user.orElseThrow(()-> GenericExceptions.notFound(userNotificationId));
+        Optional<UserNotification> userNotification = userNotificationRepository.findById(userNotificationId);
+        return userNotification.orElseThrow(()-> GenericExceptions.notFound(userNotificationId));
     }
 
     @Override
@@ -51,4 +53,18 @@ public class UserNotificationServiceImpl implements UserNotificationService {
         userNotificationRepository.deleteById(userNotificationId);
         return String.format("Record with id %d deleted", userNotificationId);
     }
+
+    @Override
+    public List<UserNotification> findAllByUserLoggedIn(){
+        User user = userService.findUserLoggedIn();
+        return user.getNotifications();
+    }
+
+    @Override
+    public void readNotification(Long userNotificationId){
+        UserNotification userNotification = this.findById(userNotificationId);
+        userNotification.setReaded(true);
+        userNotificationRepository.save(userNotification);
+    }
+
 }

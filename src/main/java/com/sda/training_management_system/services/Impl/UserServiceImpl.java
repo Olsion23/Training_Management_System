@@ -28,12 +28,17 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
+
     @Override
     public User create(User entity) {
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        userRepository.save(entity);
-        entity.setActive(true);
-        return entity;
+        if (userRepository.existsByLogin(entity.getLogin())) {
+            throw GenericExceptions.usernameExist(entity.getLogin());
+        } else {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+            entity.setActive(true);
+            userRepository.save(entity);
+            return entity;
+        }
     }
 
     @Override
@@ -41,19 +46,39 @@ public class UserServiceImpl implements UserService {
         if (entity.getUserId() == null) {
             throw GenericExceptions.idIsNull();
         } else {
-            Optional<User> existingUser = userRepository.findById(entity.getUserId());
-            if (existingUser.isPresent()) {
-                userRepository.save(entity);
+            User existingUser = this.findById(entity.getUserId());
+            if (entity.getLogin().equals(existingUser.getLogin())) {
+                existingUser = this.updateUserValues(existingUser, entity);
+                userRepository.save(existingUser);
+                return existingUser;
+            } else {
+                if (userRepository.existsByLogin(entity.getLogin()))
+                    throw GenericExceptions.usernameExist(entity.getLogin());
+                else {
+                    existingUser = this.updateUserValues(existingUser, entity);
+                    userRepository.save(existingUser);
+                    return existingUser;
+                }
             }
         }
-        return entity;
     }
 
     @Override
     public User findById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        return user.orElseThrow(()-> GenericExceptions.notFound(userId));
+        return user.orElseThrow(() -> GenericExceptions.notFound(userId));
+    }
 
+    private User updateUserValues(User existingUser, User newUser) {
+        if (newUser.getLogin() != null)
+            existingUser.setLogin(newUser.getLogin());
+        if (newUser.getPassword() != null)
+            existingUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        if (newUser.getFirstName() != null)
+            existingUser.setFirstName(newUser.getFirstName());
+        if (newUser.getLastName() != null)
+            existingUser.setLastName(newUser.getLastName());
+        return existingUser;
     }
 
     @Override
@@ -88,10 +113,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
+        if (userRepository.existsByLogin(user.getLogin())) {
+            throw GenericExceptions.usernameExist(user.getLogin());
+        } else {
             user.setActive(true);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole(roleRepository.findById("ROLE_PARTICIPANT").get());
             userRepository.save(user);
             return user;
+        }
     }
 }

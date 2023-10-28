@@ -11,4 +11,7 @@ public interface UserNotificationService {
     List<UserNotification>findAll();
     String delete(Long userNotificationId);
 
+    List<UserNotification> findAllByUserLoggedIn();
+
+    void readNotification(Long userNotificationId);
 }
