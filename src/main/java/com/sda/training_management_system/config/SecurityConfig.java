@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.yaml.snakeyaml.reader.StreamReader;
 
 
 @Configuration
@@ -24,7 +25,8 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final RoleRepository roleRepository;
     @Value(value = "${frontendUrl}")
-    private static String allowedUrl;
+    private String frontendUrl;
+    private final String [] allowedUrl = new String []{"/user/login", "user/register", "roles/all", "user/all", "course/all"};
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, RoleRepository roleRepository) {
         this.userDetailsServiceImpl = userDetailsService;
@@ -34,8 +36,8 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedUrl)
-                .allowedHeaders("Authorization")
+                .allowedOrigins(frontendUrl)
+                .allowedHeaders("*")
                 .allowedMethods("*");
     }
 
@@ -75,7 +77,8 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
         httpSecurity.authenticationManager(authenticationManager)
                 .authorizeHttpRequests(request -> {
-                    request.anyRequest().permitAll();
+                    request.requestMatchers("/user/create").hasRole("ADMIN")
+                            .anyRequest().permitAll();
                 })
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

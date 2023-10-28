@@ -2,6 +2,7 @@ package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.Class;
 import com.sda.training_management_system.dao.Course;
+import com.sda.training_management_system.dao.User;
 import com.sda.training_management_system.exceptions.GenericExceptions;
 import com.sda.training_management_system.repositories.ClassRepository;
 import com.sda.training_management_system.repositories.CourseRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -41,8 +43,8 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public Class findById(Long classId) {
-        return classRepository.findById(classId)
-                .orElseThrow(() -> GenericExceptions.notFound(classId));
+        Optional<Class> user = classRepository.findById(classId);
+        return user.orElseThrow(()-> GenericExceptions.notFound(classId));
     }
 
     @Override
@@ -52,6 +54,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public String delete(Long classId) {
-        return null;
+        classRepository.findById(classId);
+        return String.format("Record with id %d deleted", classId);
     }
 }

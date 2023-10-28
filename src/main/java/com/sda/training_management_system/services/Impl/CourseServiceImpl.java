@@ -1,6 +1,7 @@
 package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.Course;
+import com.sda.training_management_system.dao.User;
 import com.sda.training_management_system.exceptions.GenericExceptions;
 import com.sda.training_management_system.repositories.CourseRepository;
 import com.sda.training_management_system.services.CourseService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,21 +24,30 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course update(Course entity) {
-        return null;
+        if (entity.getCourseId() == null) {
+            throw GenericExceptions.idIsNull();
+        } else {
+            Optional<Course> existingUser = courseRepository.findById(entity.getCourseId());
+            if (existingUser.isPresent()) {
+                courseRepository.save(entity);
+            }
+        }
+        return entity;
     }
-
     @Override
     public Course findById(Long courseId) {
-        return courseRepository.findById(courseId).orElseThrow(()-> GenericExceptions.notFound(courseId));
+        Optional<Course> user = courseRepository.findById(courseId);
+        return user.orElseThrow(()-> GenericExceptions.notFound(courseId));
     }
 
     @Override
     public List<Course> findAll() {
-        return null;
+        return courseRepository.findAll();
     }
 
     @Override
     public String delete(Long courseId) {
-        return null;
+        courseRepository.findById(courseId);
+        return String.format("Record with id %d deleted", courseId);
     }
 }
