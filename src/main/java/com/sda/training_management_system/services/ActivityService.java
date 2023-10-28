@@ -14,4 +14,6 @@ public interface ActivityService {
     List<Activity> findAll();
 
     String delete(Long activityId);
+
+    List<Activity> getAllByClass(Long classId);
 }

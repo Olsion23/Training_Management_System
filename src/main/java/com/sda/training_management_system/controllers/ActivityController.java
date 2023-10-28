@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Activity")
+@RequestMapping("/activity")
 @RequiredArgsConstructor
 public class ActivityController {
     private final ActivityService activityService;

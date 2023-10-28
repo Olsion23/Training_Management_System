@@ -6,10 +6,17 @@ import org.springframework.context.ApplicationListener;
 import java.util.List;
 
 public interface ApplicationService {
-    Application create(Application entity);
-    Application update(Application entity);
+    Application create(Long courseId);
+
+    Application refuseApplication(Long applicationId);
+
+    Application acceptApplication(Long applicationId);
+
     Application findById(Long applicationId);
     List<Application> findAll();
+
+    List<Application> findAllCreated();
+
     String delete(Long applicationId);
 
 }

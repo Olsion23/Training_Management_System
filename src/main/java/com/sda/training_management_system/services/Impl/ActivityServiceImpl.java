@@ -22,30 +22,27 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity create(Activity activity) {
-        if(activity.getActivityId()==null){
+        if (activity.getActivityId() == null) {
             throw GenericExceptions.idNotNull();
-        } else if (activityRepository.existsById(activity.getActivityId())) {
-            throw GenericExceptions.idExist(activity.getActivityId());
-
-        }else activityRepository.save(activity);
-        return activity;
+        } else {
+            Class existingClass = classRepository.findById(activity.getAClass().getClassId())
+                    .orElseThrow(() -> GenericExceptions.notFound(activity.getAClass()));
+            activity.setAClass(existingClass);
+            activityRepository.save(activity);
+            return activity;
+        }
     }
+
     @Override
     public Activity update(Activity entity) {
         if (entity.getActivityId() == null) {
             throw GenericExceptions.idIsNull();
         } else {
-            Activity existingActivity = activityRepository.findById(entity.getActivityId())
-                    .orElseThrow(() -> GenericExceptions.notFound(entity.getActivityId()));
+            Activity existingActivity = this.findById(entity.getActivityId());
             if (entity.getDate() != null)
                 existingActivity.setDate(entity.getDate());
             if (entity.getSubject() != null)
                 existingActivity.setSubject(entity.getSubject());
-            if (entity.getAClass() != null) {
-                Class existingClass = classRepository.findById(entity.getAClass().getClassId())
-                        .orElseThrow(()-> GenericExceptions.notFound(entity.getAClass()));
-                existingActivity.setAClass(existingClass);
-            }
             activityRepository.save(existingActivity);
             return existingActivity;
         }
@@ -59,17 +56,20 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> findAll() {
-        List<Activity>activityList=activityRepository.findAll();
-        return activityList;
+        return activityRepository.findAll();
     }
 
     @Override
     public String delete(Long activityId) {
-        Optional<Activity>activity=activityRepository.findById(activityId);
-        if(activity.isPresent()){
-            activityRepository.deleteById(activityId);
-            return String.format("Record with id %d deleted", activityId);
-        }else throw  GenericExceptions.notFound(activityId);
+        Activity activity = this.findById(activityId);
+        activityRepository.delete(activity);
+        return String.format("Record with id %d deleted", activityId);
+    }
 
+    @Override
+    public List<Activity> getAllByClass(Long classId){
+        Class clazz = classRepository.findById(classId)
+                .orElseThrow(()-> GenericExceptions.notFound(classId));
+        return clazz.getActivities();
     }
 }

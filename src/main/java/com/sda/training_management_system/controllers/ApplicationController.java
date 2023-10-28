@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Application")
+@RequestMapping("/application")
 @RequiredArgsConstructor
 public class ApplicationController {
     private final ApplicationService applicationService;
@@ -25,13 +25,8 @@ public class ApplicationController {
     }
 
     @PostMapping("/create")
-    public Application create(@RequestBody Application application) {
-        return applicationService.create(application);
-    }
-
-    @PutMapping("/update")
-    public Application update(@RequestBody Application application) {
-        return applicationService.update(application);
+    public Application create(@RequestParam Long courseId) {
+        return applicationService.create(courseId);
     }
 
     @DeleteMapping("/delete")

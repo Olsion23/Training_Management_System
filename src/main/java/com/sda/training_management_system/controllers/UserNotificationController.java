@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/UserNotification")
+@RequestMapping("/userNotification")
 @RequiredArgsConstructor
 public class UserNotificationController {
     private final UserNotificationService userNotificationService;
