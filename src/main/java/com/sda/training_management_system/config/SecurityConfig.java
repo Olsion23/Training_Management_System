@@ -15,8 +15,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -24,7 +29,8 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final RoleRepository roleRepository;
     @Value(value = "${frontendUrl}")
-    private static String allowedUrl;
+    private String frontendUrl;
+    private final String[] allowedUrl = new String[]{"/user/login", "/user/register", "/roles/all","/user/all","/course/all"};
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, RoleRepository roleRepository) {
         this.userDetailsServiceImpl = userDetailsService;
@@ -34,8 +40,8 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedUrl)
-                .allowedHeaders("Authorization")
+                .allowedOrigins(frontendUrl)
+                .allowedHeaders("*")
                 .allowedMethods("*");
     }
 

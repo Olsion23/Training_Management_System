@@ -23,6 +23,11 @@ public class GenericExceptions extends RuntimeException{
         String message = String.format("Record with username %s exists", usename);
         return new GenericExceptions(message, 400);
     }
+
+    public static GenericExceptions idExist(Long id){
+        String message = String.format("Record with username %s exists", id);
+        return new GenericExceptions(message, 400);
+    }
     public Integer getStatus(){
         return status;
     }

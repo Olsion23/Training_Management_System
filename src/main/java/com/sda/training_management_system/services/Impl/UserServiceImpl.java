@@ -2,6 +2,7 @@ package com.sda.training_management_system.services.Impl;
 
 import com.sda.training_management_system.dao.User;
 import com.sda.training_management_system.exceptions.GenericExceptions;
+import com.sda.training_management_system.repositories.RoleRepository;
 import com.sda.training_management_system.repositories.UserRepository;
 import com.sda.training_management_system.security.AuthRequest;
 import com.sda.training_management_system.services.UserService;
@@ -20,10 +21,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     @Override
     public User create(User entity) {
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        return null;
+        userRepository.save(entity);
+        entity.setActive(true);
+        return entity;
     }
 
     @Override
@@ -60,10 +64,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-            user.setActive(true);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            return user;
+        user.setActive(true);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(roleRepository.findById("ROLE_PARTICIPANT").get());
+        userRepository.save(user);
+        return user;
     }
     public User FindUserLoggedIn(){
         return userRepository.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName())

@@ -21,20 +21,14 @@ public class ActivityServiceImpl implements ActivityService {
     private final ClassRepository classRepository;
 
     @Override
-    public Activity create(Activity entity) {
-        if (entity.getActivityId() != null) {
+    public Activity create(Activity activity) {
+        if(activity.getActivityId()==null){
             throw GenericExceptions.idNotNull();
-        } else {
-            if (entity.getAClass() != null && entity.getAClass().getClassId() != null) {
-                Class existingClass = classRepository.findById(entity.getAClass().getClassId())
-                        .orElseThrow(() -> GenericExceptions.notFound(entity.getAClass()));
-                entity.setAClass(existingClass);
-                activityRepository.save(entity);
-                return entity;
-            } else {
-                throw GenericExceptions.notFound(entity.getAClass());
-            }
-        }
+        } else if (activityRepository.existsById(activity.getActivityId())) {
+            throw GenericExceptions.idExist(activity.getActivityId());
+
+        }else activityRepository.save(activity);
+        return activity;
     }
     @Override
     public Activity update(Activity entity) {
@@ -65,12 +59,17 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> findAll() {
-        return activityRepository.findAll();
+        List<Activity>activityList=activityRepository.findAll();
+        return activityList;
     }
 
     @Override
     public String delete(Long activityId) {
-        activityRepository.deleteById(activityId);
-        return String.format("Record with id %d deleted", activityId);
+        Optional<Activity>activity=activityRepository.findById(activityId);
+        if(activity.isPresent()){
+            activityRepository.deleteById(activityId);
+            return String.format("Record with id %d deleted", activityId);
+        }else throw  GenericExceptions.notFound(activityId);
+
     }
 }
