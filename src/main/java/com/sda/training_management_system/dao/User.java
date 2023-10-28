@@ -1,6 +1,5 @@
 package com.sda.training_management_system.dao;
 
-import com.sda.training_management_system.static_data.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,10 +29,10 @@ public class User {
     private List<Application> applications;
 
     @ManyToMany(mappedBy = "participants")
-    private List<Class> courses;
+    private List<Class> participantClasses;
 
     @ManyToMany(mappedBy = "leaders")
-    private List<Class> leaderCourses;
+    private List<Class> leaderClasses;
 
     @OneToMany(mappedBy = "user")
     private List<UserNotification> notifications;
