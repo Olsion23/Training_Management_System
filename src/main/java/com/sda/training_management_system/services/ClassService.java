@@ -10,4 +10,6 @@ public interface ClassService {
     Class findById(Long classId);
     List<Class> findAll();
     String delete(Long classId);
+
+    List<Class> getAllUserClasses();
 }

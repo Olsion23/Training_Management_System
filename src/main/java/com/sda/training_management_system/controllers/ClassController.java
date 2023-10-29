@@ -38,4 +38,9 @@ public class ClassController {
     public String deleteById(@RequestParam Long classId) {
         return classService.delete(classId);
     }
+
+    @GetMapping("/byUser")
+    public List<Class> getByUser(){
+        return classService.getAllUserClasses();
+    }
 }
