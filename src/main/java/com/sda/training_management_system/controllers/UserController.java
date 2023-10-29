@@ -49,4 +49,9 @@ public class UserController {
     public User register(@RequestBody User user){
         return userService.register(user);
     }
+
+    @GetMapping("/getLoggin")
+    public User getLogin(){
+        return this.userService.findUserLoggedIn();
+    }
 }
