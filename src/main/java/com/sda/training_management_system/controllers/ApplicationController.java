@@ -33,4 +33,19 @@ public class ApplicationController {
     public String deleteById(@RequestParam Long applicationId) {
         return applicationService.delete(applicationId);
     }
+
+    @PutMapping("/accept/{applicationId}")
+    public Application acceptApplication(@PathVariable Long applicationId) {
+        return applicationService.acceptApplication(applicationId);
+    }
+
+    @PutMapping("/refuse/{applicationId}")
+    public Application refuseApplication(@PathVariable Long applicationId) {
+        return applicationService.refuseApplication(applicationId);
+    }
+
+    @GetMapping("/created")
+    public List<Application> findAllCreated() {
+        return applicationService.findAllCreated();
+    }
 }
