@@ -31,6 +31,6 @@ public class ActivityController {
     @DeleteMapping("/delete")
     public String deleteById(@RequestParam Long activityId){
         return activityService.delete(activityId);
-
     }
+
 }
