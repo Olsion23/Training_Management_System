@@ -1,7 +1,9 @@
 package com.sda.training_management_system.config;
 
 import com.sda.training_management_system.dao.Role;
+import com.sda.training_management_system.dao.User;
 import com.sda.training_management_system.repositories.RoleRepository;
+import com.sda.training_management_system.repositories.UserRepository;
 import com.sda.training_management_system.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -15,26 +17,26 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
 
 
 @Configuration
 public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+
+
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+
     @Value(value = "${frontendUrl}")
     private String frontendUrl;
     private final String[] allowedUrl = new String[]{"/user/login", "/user/register", "/roles/all","/user/all","/course/all"};
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, RoleRepository roleRepository) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, RoleRepository roleRepository, UserRepository userRepository) {
         this.userDetailsServiceImpl = userDetailsService;
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -62,6 +64,17 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
             role.setRoleId("ROLE_PARTICIPANT");
             roleRepository.save(role);
         }
+        if (!userRepository.existsByLogin("admin")){
+            User user = new User();
+            user.setActive(true);
+            user.setLogin("admin");
+            user.setPassword(passwordEncoder().encode("admin"));
+            user.setFirstName("Admin");
+            user.setLastName("istrator");
+            user.setRole(roleRepository.findById("ROLE_ADMIN").get());
+            userRepository.save(user);
+        }
+
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
