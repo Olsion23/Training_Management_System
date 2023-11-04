@@ -17,4 +17,7 @@ public interface UserService {
     ResponseEntity<?> login(AuthRequest authRequest);
     User register(User user);
 
+    List<User> getAllParticipant();
+
+    List<User> getAllLeaders();
 }

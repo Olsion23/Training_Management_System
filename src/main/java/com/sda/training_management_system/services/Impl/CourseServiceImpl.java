@@ -52,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public String delete(Long courseId) {
-        courseRepository.findById(courseId);
+        courseRepository.deleteById(courseId);
         return String.format("Record with id %d deleted", courseId);
     }
 }

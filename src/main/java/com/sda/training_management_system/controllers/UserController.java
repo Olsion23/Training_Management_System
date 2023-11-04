@@ -54,4 +54,13 @@ public class UserController {
     public User getLogin(){
         return this.userService.findUserLoggedIn();
     }
+
+    @GetMapping("/participants")
+    public List<User> getAllParticipant(){
+        return userService.getAllParticipant();
+    }
+    @GetMapping("/leaders")
+    public List<User> getAllLeaders(){
+        return userService.getAllLeaders();
+    }
 }

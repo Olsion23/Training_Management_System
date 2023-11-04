@@ -31,7 +31,7 @@ public class SecurityConfig implements CommandLineRunner, WebMvcConfigurer {
 
     @Value(value = "${frontendUrl}")
     private String frontendUrl;
-    private final String[] allowedUrl = new String[]{"/user/login", "/user/register", "/roles/all","/user/all","/course/all"};
+    private final String[] allowedUrl = new String[]{"/user/login", "/user/register", "/roles/all","/user/all","/course/all","course/create"};
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, RoleRepository roleRepository, UserRepository userRepository) {
         this.userDetailsServiceImpl = userDetailsService;

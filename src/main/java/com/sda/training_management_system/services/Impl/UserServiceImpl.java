@@ -1,5 +1,6 @@
 package com.sda.training_management_system.services.Impl;
 
+import com.sda.training_management_system.dao.Role;
 import com.sda.training_management_system.dao.User;
 import com.sda.training_management_system.exceptions.GenericExceptions;
 import com.sda.training_management_system.repositories.RoleRepository;
@@ -122,5 +123,19 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             return user;
         }
+    }
+
+    @Override
+    public List<User> getAllParticipant() {
+        Role role = roleRepository.findById("ROLE_PARTICIPANT")
+                .orElseThrow();
+        return userRepository.getByRole(role);
+    }
+
+    @Override
+    public List<User> getAllLeaders() {
+        Role role = roleRepository.findById("ROLE_LEADER")
+                .orElseThrow();
+        return userRepository.getByRole(role);
     }
 }
