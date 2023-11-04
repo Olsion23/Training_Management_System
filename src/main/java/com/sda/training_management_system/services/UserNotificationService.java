@@ -1,6 +1,9 @@
 package com.sda.training_management_system.services;
 
+import com.sda.training_management_system.dao.Notification;
 import com.sda.training_management_system.dao.UserNotification;
+import com.sda.training_management_system.static_data.Response;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -14,4 +17,6 @@ public interface UserNotificationService {
     List<UserNotification> findAllByUserLoggedIn();
 
     void readNotification(Long userNotificationId);
+
+    ResponseEntity<Response> sendNotification(Notification notification, Long userId);
 }

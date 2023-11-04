@@ -1,9 +1,12 @@
 package com.sda.training_management_system.controllers;
 
 import com.sda.training_management_system.dao.Activity;
+import com.sda.training_management_system.dao.Notification;
 import com.sda.training_management_system.dao.UserNotification;
 import com.sda.training_management_system.services.UserNotificationService;
+import com.sda.training_management_system.static_data.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +48,11 @@ public class UserNotificationController {
     @GetMapping("/read_notifications")
     public void readNotification(@RequestParam Long userNotificationId){
         userNotificationService.readNotification(userNotificationId);
+    }
+
+    @PostMapping("/sendNotification")
+    public ResponseEntity<Response> sendNotification(@RequestBody Notification notification,@RequestParam Long userId){
+        return userNotificationService.sendNotification(notification, userId);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.sda.training_management_system.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sda.training_management_system.static_data.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

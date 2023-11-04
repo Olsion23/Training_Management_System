@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final UserService userService;
-    private CourseService courseService;
+    private final CourseService courseService;
 
     @Override
     public Application create(Long courseId) {

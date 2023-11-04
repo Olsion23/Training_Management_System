@@ -1,5 +1,6 @@
 package com.sda.training_management_system.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class User {
     private String lastName;
     private Boolean active;
     @OneToMany(mappedBy = "participant")
+    @JsonIgnore
     private List<Application> applications;
 
     @ManyToMany(mappedBy = "participants")
